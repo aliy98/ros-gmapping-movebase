@@ -40,6 +40,7 @@ then you can choose robot's behaviour by inputing the corresponding number
   
 ***
   movebase client node:
+  
   main()
   {
     initialize movebase client node
@@ -54,6 +55,7 @@ then you can choose robot's behaviour by inputing the corresponding number
 
 ***
   teleop twist keyboard node:
+  
   main()
   {
     initialize teleop twist keyboard node
