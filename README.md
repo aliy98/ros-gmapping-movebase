@@ -22,4 +22,7 @@ For initializing the master node also, in a new terminal run the following comma
 $ source devel/setup.bash
 $ roslaunch final_assignment master.launch
 ```
+then you can choose robot's behaviour by inputing the corresponding number
+
+
 
