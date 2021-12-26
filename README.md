@@ -40,42 +40,49 @@ then you can choose robot's behaviour by inputing the corresponding number
   
 ***
   movebase client node:
-  
-  while(1)
+  main()
   {
     initialize movebase client node
-    call master node to get if enable response has been sent from user input
-    get target point from user
-    call movebase node to send target point as an action 
-    detect if the target has been reached before timeout
+    call master node to detect if enable response has been sent from user input
+    while(1)
+    {
+      get target point from user
+      call movebase node to send target point as an action 
+      detect if the target has been reached before timeout
+    }
   }
 
 ***
   teleop twist keyboard node:
-  
-  while(1)
+  main()
   {
     initialize teleop twist keyboard node
     call master node to get if enable response has been sent from user input
-    get user command for moving the robot
-    publish the corresponding twist to cmd_vel topic
+    while(1)
+    {
+      get user command for moving the robot
+      publish the corresponding twist to cmd_vel topic
+    }
   }
  
  ***
   assisted teleop keyboard node:
   
-  while(1)
+  main()
   {
     initialize assisted teleop keyboard node 
     call master node to get if enable response has been sent from user input
-    subscribe laser scan topic to detect obstacles
-    get user command for moving the robot
-    if there is an obstacle {
-      don't move the robot toward it
-    } else {
-      publish the corresponding twist to cmd_vel topic
+    while(1)
+    {
+      subscribe laser scan topic to detect obstacles
+      get user command for moving the robot
+      if there is an obstacle {
+        don't move the robot toward it
+      } else {
+        publish the corresponding twist to cmd_vel topic
+      }
     }
-  }
+  } 
 ```
 
 
