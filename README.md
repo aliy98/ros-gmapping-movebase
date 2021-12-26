@@ -10,4 +10,16 @@ $ cd ..
 $ source /opt/ros/<distro>/setup.bash
 $ catkin_make
 $ source devel/setup.bash
+$ roslaunch final_assignment simulation_gmapping.launch
+```
+in order to run the movebase node, open a new terminal in the same directory and run the following commands:
+```bashscript
+$ source devel/setup.bash
+$ roslaunch final_assignment move_base.launch
+```
+For initializing the master node also, in a new terminal run the following commands:
+```bashscript
+$ source devel/setup.bash
 $ roslaunch final_assignment master.launch
+```
+
