@@ -25,4 +25,40 @@ $ roslaunch final_assignment master.launch
 then you can choose robot's behaviour by inputing the corresponding number
 
 
+## Pseudocode
+```
+***
+  master node:
+  
+  main()
+  {
+    
+  }
+
+  
+***
+  movebase node:
+  
+  while(1)
+  {
+
+  }
+
+***
+  teleop twist keyboard node:
+  
+  while(1)
+  {
+
+  }
+ 
+ ***
+  assisted teleop keyboard node:
+  
+  while(1)
+  {
+
+  }
+```
+
 
