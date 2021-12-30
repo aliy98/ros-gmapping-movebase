@@ -6,7 +6,7 @@ import os
 """
     master node:
         gets user request to choose robot behaviour
-        using the following services
+        using robot_state rosparam
 """
 
 # 1 - movebase client
