@@ -25,7 +25,7 @@ $ roslaunch final_assignment master.launch
 then you can choose robot's behaviour by inputing the corresponding number
 
 ## Software Architecture
-![Slide1](https://user-images.githubusercontent.com/65722399/147779184-a65369f6-0b82-4127-94f2-1a4e6501b66b.JPG)
+![Slide1](https://user-images.githubusercontent.com/65722399/147779264-a4f65968-3760-4857-8270-8b281d62693d.JPG)
 
 ## Pseudocode
 ```
