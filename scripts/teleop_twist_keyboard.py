@@ -168,27 +168,37 @@ class PublishThread(threading.Thread):
         while not self.done:
             self.condition.acquire()
             # Wait for a new message or timeout.
-            # self.condition.wait(self.timeout)
+            self.condition.wait(self.timeout)
 
-            # avoids the robot from moving forward if there is an obstacle
-            if front_obs == True and self.x == 1:
-                twist.linear.x = 0
-            # otherwise it can move forward
-            else:
-                twist.linear.x = self.x * self.speed 
-            twist.linear.y = self.y * self.speed
-            twist.linear.z = self.z * self.speed
-            twist.angular.x = 0
-            twist.angular.y = 0
-            # avoids the robot from turning to right if there is an obstacle
-            if right_obs == True and self.th == -1:
-                twist.angular.z = 0
-            # avoids the robot from turning to left if there is an obstacle
-            elif left_obs == True and self.th == 1:
-                twist.angular.z = 0
-            # otherwise robot can turn in any direction
-            else:
+            if rospy.get_param('robot_state')=='2':
+                # Copy state into twist message.
+                twist.linear.x = self.x * self.speed
+                twist.linear.y = self.y * self.speed
+                twist.linear.z = self.z * self.speed
+                twist.angular.x = 0
+                twist.angular.y = 0
                 twist.angular.z = self.th * self.turn
+
+            elif rospy.get_param('robot_state')=='3':
+                # avoids the robot from moving forward if there is an obstacle
+                if front_obs == True and self.x == 1:
+                    twist.linear.x = 0
+                # otherwise it can move forward
+                else:
+                    twist.linear.x = self.x * self.speed 
+                twist.linear.y = self.y * self.speed
+                twist.linear.z = self.z * self.speed
+                twist.angular.x = 0
+                twist.angular.y = 0
+                # avoids the robot from turning to right if there is an obstacle
+                if right_obs == True and self.th == -1:
+                    twist.angular.z = 0
+                # avoids the robot from turning to left if there is an obstacle
+                elif left_obs == True and self.th == 1:
+                    twist.angular.z = 0
+                # otherwise robot can turn in any direction
+                else:
+                    twist.angular.z = self.th * self.turn
 
             self.condition.release()
 
@@ -242,7 +252,6 @@ def teleop():
 
         os.system('cls||clear')
         print("** TELEOP TWIST KEYBOARD NODE **\n")
-        print("(manual mode)\n")
         print(mesg)
         print(vels(speed,turn))
         while(1):
@@ -290,76 +299,6 @@ def teleop():
 
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
 
-def assisted_teleop():
-    settings = termios.tcgetattr(sys.stdin)
-    speed = rospy.get_param("~speed", 0.5)
-    turn = rospy.get_param("~turn", 1.0)
-    repeat = rospy.get_param("~repeat_rate", 0.0)
-    key_timeout = rospy.get_param("~key_timeout", 0.0)
-    if key_timeout == 0.0:
-        key_timeout = None
-
-    pub_thread = PublishThread(repeat)
-
-    x = 0
-    y = 0
-    z = 0
-    th = 0
-    status = 0
-
-    try:
-        pub_thread.wait_for_subscribers()
-        pub_thread.update(x, y, z, th, speed, turn)
-
-        os.system('cls||clear')
-        print("** TELEOP TWIST KEYBOARD NODE **\n")
-        print("(assisted mode)\n")
-        print(mesg)
-        print(vels(speed,turn))
-        while(1):
-            key = getKey(key_timeout)
-            if key in moveBindings.keys():
-                x = moveBindings[key][0]
-                y = moveBindings[key][1]
-                z = moveBindings[key][2]
-                th = moveBindings[key][3]
-            elif key in speedBindings.keys():
-                speed = speed * speedBindings[key][0]
-                turn = turn * speedBindings[key][1]
-
-                print(vels(speed,turn))
-                if (status == 14):
-                    print(mesg)
-                status = (status + 1) % 15
-            else:
-                # Skip updating cmd_vel if key timeout and robot already
-                # stopped.
-                if key == '' and x == 0 and y == 0 and z == 0 and th == 0:
-                    continue
-                x = 0
-                y = 0
-                z = 0
-                th = 0
-                if (key == '\x03'):
-                    rospy.set_param('robot_state', '0')
-                    os.system('cls||clear')
-                    print("** TELEOP TWIST KEYBOARD NODE **\n")
-                    print("choose robot behaviour in master node")
-                    time.sleep(5)
-                    os.system('cls||clear')
-                    print("** TELEOP TWIST KEYBOARD NODE **\n")
-                    print("waiting for master node response...\n")
-                    break
- 
-            pub_thread.update(x, y, z, th, speed, turn)
-
-    except Exception as e:
-        print(e)
-
-    finally:
-        pub_thread.stop()
-
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
 
 
 def main():
@@ -371,10 +310,8 @@ def main():
     print("waiting for master node response...\n")
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
-        if rospy.get_param('robot_state')=='2':
+        if rospy.get_param('robot_state')=='2' or rospy.get_param('robot_state')=='3':
             teleop()
-        elif rospy.get_param('robot_state')=='3':
-            assisted_teleop()
         else:
             rate.sleep()
             continue
