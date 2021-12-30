@@ -27,10 +27,10 @@ then you can choose robot's behaviour by inputing the corresponding number
 ## Software Architecture
 ![Slide1](https://user-images.githubusercontent.com/65722399/147779264-a4f65968-3760-4857-8270-8b281d62693d.JPG)
 Software architecture in this project is based on three node:
-1. Master Node: gets user request to choose robot behaviour
-        using robot_state rosparam
-2. Movebase Client Node: gets desired position from user and sends it to movebase node using 
-        actionlib and if the goal is not reached before timeout cancels it
+1. Master Node: 
+        gets user request to choose robot behaviour using robot_state rosparam
+2. Movebase Client Node: 
+        gets desired position from user and sends it to movebase node using actionlib and if the goal is not reached before timeout cancels it
 3. Teleop Twist Keyboard Node: it can implement two behaviours on robot:
         1: moving without obstacle avoidance:
             user can move the robot using keys it publishes the desired movements
