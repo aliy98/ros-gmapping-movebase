@@ -31,7 +31,7 @@ Software architecture in this project is based on three node:
         using robot_state rosparam
 2. Movebase Client Node: gets desired position from user and sends it to movebase node using 
         actionlib and if the goal is not reached before timeout cancels it
-3. Teleop Twist Keyboard Node: it has can implement two behaviours on robot:
+3. Teleop Twist Keyboard Node: it can implement two behaviours on robot:
         1: moving without obstacle avoidance:
             user can move the robot using keys it publishes the desired movements
             to cmd_vel topic
