@@ -167,8 +167,6 @@ class PublishThread(threading.Thread):
         twist = Twist()
         while not self.done:
             self.condition.acquire()
-            # Wait for a new message or timeout.
-            self.condition.wait(self.timeout)
 
             if rospy.get_param('robot_state')=='2':
                 # Copy state into twist message.
