@@ -11,7 +11,7 @@ import time
 
 """
     teleop twist keyboard node:
-        it has can implement two behaviours on robot:
+        it can implement two behaviours on robot:
 
         1: moving without obstacle avoidance:
             user can move the robot using keys it publishes the desired movements
