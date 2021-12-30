@@ -5,16 +5,28 @@ import roslib; roslib.load_manifest('teleop_twist_keyboard')
 import rospy
 from geometry_msgs.msg import Twist
 import sys, select, termios, tty
-from std_srvs.srv import *
+from sensor_msgs.msg import LaserScan
+import os
+import time
 
 """
-    teleop keyboard node:
-        user can move the robot using keys it publishes the desired movements
-        to cmd_vel topic
+    teleop twist keyboard node:
+        it has can implement two behaviours on robot:
+
+        1: moving without obstacle avoidance:
+            user can move the robot using keys it publishes the desired movements
+            to cmd_vel topic
+
+        2: moveing with obstacle avoidance:
+            subscribes scan topic and uses it to detect obstacles. user 
+            can move the robot using keys and it also avoids the robot
+            from colliding the obstacles
 """
 
-active_ = False
-msg = """
+front_obs = False
+right_obs = False
+left_obs = False
+mesg = """
 Reading from the keyboard  and Publishing to Twist!
 ---------------------------
 Moving around:
@@ -37,9 +49,10 @@ q/z : increase/decrease max speeds by 10%
 w/x : increase/decrease only linear speed by 10%
 e/c : increase/decrease only angular speed by 10%
 
-CTRL-C to quit
+CTRL-C to change robot behaviour
 """
 
+# binding input keys for moving the robot
 moveBindings = {
         'i':(1,0,0,0),
         'o':(1,0,0,-1),
@@ -69,6 +82,33 @@ speedBindings={
         'e':(1,1.1),
         'c':(1,.9),
     }
+
+# callback function for subscring laser scan topic 
+def clbk_laser(msg):
+    global front_obs 
+    global right_obs 
+    global left_obs
+    regions = {
+        'right':  min(min(msg.ranges[0:143]), 10),
+        'fright': min(min(msg.ranges[144:287]), 10),
+        'front':  min(min(msg.ranges[288:431]), 10),
+        'fleft':  min(min(msg.ranges[432:575]), 10),
+        'left':   min(min(msg.ranges[576:719]), 10),
+    }
+    if regions['front'] < 1:
+        front_obs = True
+    else:
+        front_obs = False
+    if regions['right'] < 1:
+        right_obs = True
+        # print("right obs detected")
+    else:
+        right_obs = False
+    if regions['left'] < 1:
+        left_obs = True
+        # print("left obs detected")
+    else:
+        left_obs = False
 
 class PublishThread(threading.Thread):
     def __init__(self, rate):
@@ -121,19 +161,34 @@ class PublishThread(threading.Thread):
         self.join()
 
     def run(self):
+        global front_obs
+        global right_obs
+        global left_obs 
         twist = Twist()
         while not self.done:
             self.condition.acquire()
             # Wait for a new message or timeout.
-            self.condition.wait(self.timeout)
+            # self.condition.wait(self.timeout)
 
-            # Copy state into twist message.
-            twist.linear.x = self.x * self.speed
+            # avoids the robot from moving forward if there is an obstacle
+            if front_obs == True and self.x == 1:
+                twist.linear.x = 0
+            # otherwise it can move forward
+            else:
+                twist.linear.x = self.x * self.speed 
             twist.linear.y = self.y * self.speed
             twist.linear.z = self.z * self.speed
             twist.angular.x = 0
             twist.angular.y = 0
-            twist.angular.z = self.th * self.turn
+            # avoids the robot from turning to right if there is an obstacle
+            if right_obs == True and self.th == -1:
+                twist.angular.z = 0
+            # avoids the robot from turning to left if there is an obstacle
+            elif left_obs == True and self.th == 1:
+                twist.angular.z = 0
+            # otherwise robot can turn in any direction
+            else:
+                twist.angular.z = self.th * self.turn
 
             self.condition.release()
 
@@ -161,7 +216,6 @@ def getKey(key_timeout):
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
-
 def vels(speed, turn):
     return "currently:\tspeed %s\tturn %s " % (speed,turn)
 
@@ -186,7 +240,10 @@ def teleop():
         pub_thread.wait_for_subscribers()
         pub_thread.update(x, y, z, th, speed, turn)
 
-        print(msg)
+        os.system('cls||clear')
+        print("** TELEOP TWIST KEYBOARD NODE **\n")
+        print("(manual mode)\n")
+        print(mesg)
         print(vels(speed,turn))
         while(1):
             key = getKey(key_timeout)
@@ -201,7 +258,7 @@ def teleop():
 
                 print(vels(speed,turn))
                 if (status == 14):
-                    print(msg)
+                    print(mesg)
                 status = (status + 1) % 15
             else:
                 # Skip updating cmd_vel if key timeout and robot already
@@ -213,6 +270,14 @@ def teleop():
                 z = 0
                 th = 0
                 if (key == '\x03'):
+                    rospy.set_param('robot_state', '0')
+                    os.system('cls||clear')
+                    print("** TELEOP TWIST KEYBOARD NODE **\n")
+                    print("choose robot behaviour in master node")
+                    time.sleep(5)
+                    os.system('cls||clear')
+                    print("** TELEOP TWIST KEYBOARD NODE **\n")
+                    print("waiting for master node response...\n")
                     break
  
             pub_thread.update(x, y, z, th, speed, turn)
@@ -225,26 +290,94 @@ def teleop():
 
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
 
-# enables teleop keyboard node if user has chosen it in master node
-def teleop_keyboard_switch(req):
-    global active_
-    active_ = req.data
-    res = SetBoolResponse()
-    res.success = True
-    res.message = 'Done!'
-    return res
+def assisted_teleop():
+    settings = termios.tcgetattr(sys.stdin)
+    speed = rospy.get_param("~speed", 0.5)
+    turn = rospy.get_param("~turn", 1.0)
+    repeat = rospy.get_param("~repeat_rate", 0.0)
+    key_timeout = rospy.get_param("~key_timeout", 0.0)
+    if key_timeout == 0.0:
+        key_timeout = None
+
+    pub_thread = PublishThread(repeat)
+
+    x = 0
+    y = 0
+    z = 0
+    th = 0
+    status = 0
+
+    try:
+        pub_thread.wait_for_subscribers()
+        pub_thread.update(x, y, z, th, speed, turn)
+
+        os.system('cls||clear')
+        print("** TELEOP TWIST KEYBOARD NODE **\n")
+        print("(assisted mode)\n")
+        print(mesg)
+        print(vels(speed,turn))
+        while(1):
+            key = getKey(key_timeout)
+            if key in moveBindings.keys():
+                x = moveBindings[key][0]
+                y = moveBindings[key][1]
+                z = moveBindings[key][2]
+                th = moveBindings[key][3]
+            elif key in speedBindings.keys():
+                speed = speed * speedBindings[key][0]
+                turn = turn * speedBindings[key][1]
+
+                print(vels(speed,turn))
+                if (status == 14):
+                    print(mesg)
+                status = (status + 1) % 15
+            else:
+                # Skip updating cmd_vel if key timeout and robot already
+                # stopped.
+                if key == '' and x == 0 and y == 0 and z == 0 and th == 0:
+                    continue
+                x = 0
+                y = 0
+                z = 0
+                th = 0
+                if (key == '\x03'):
+                    rospy.set_param('robot_state', '0')
+                    os.system('cls||clear')
+                    print("** TELEOP TWIST KEYBOARD NODE **\n")
+                    print("choose robot behaviour in master node")
+                    time.sleep(5)
+                    os.system('cls||clear')
+                    print("** TELEOP TWIST KEYBOARD NODE **\n")
+                    print("waiting for master node response...\n")
+                    break
+ 
+            pub_thread.update(x, y, z, th, speed, turn)
+
+    except Exception as e:
+        print(e)
+
+    finally:
+        pub_thread.stop()
+
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+
 
 def main():
-    global active_
-    rospy.init_node('teleop_keyboard')
-    srv = rospy.Service('teleop_keyboard_switch', SetBool, teleop_keyboard_switch)
+    rospy.init_node('teleop_twist_keyboard')
+    rospy.set_param('robot_state', '0')
+    sub = rospy.Subscriber('/scan', LaserScan, clbk_laser)
+    os.system('cls||clear')
+    print("** TELEOP TWIST KEYBOARD NODE **\n")
+    print("waiting for master node response...\n")
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
-        if not active_:
+        if rospy.get_param('robot_state')=='2':
+            teleop()
+        elif rospy.get_param('robot_state')=='3':
+            assisted_teleop()
+        else:
             rate.sleep()
             continue
-        else:
-            teleop()
         rate.sleep()
 
 if __name__ == '__main__':
