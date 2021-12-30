@@ -26,7 +26,7 @@ then you can choose robot's behaviour by inputing the corresponding number
 
 ## Software Architecture
 ![Slide1](https://user-images.githubusercontent.com/65722399/147779264-a4f65968-3760-4857-8270-8b281d62693d.JPG)
-Software architecture in this project is based on three node:
+Software architecture in this project is based on three nodes:
 1. Master Node: 
         gets user request to choose robot behaviour using robot_state rosparam
 2. Movebase Client Node: 
