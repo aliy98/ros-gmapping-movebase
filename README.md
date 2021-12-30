@@ -10,6 +10,7 @@ $ cd ..
 $ source /opt/ros/<distro>/setup.bash
 $ catkin_make
 $ source devel/setup.bash
+$ sudo apt install konsole
 $ roslaunch final_assignment simulation_gmapping.launch
 ```
 in order to run the movebase node, open a new terminal in the same directory and run the following commands:
