@@ -40,13 +40,16 @@ def movebase_clinet():
         client.wait_for_server()
         # Sends the goal to the action server.
         client.send_goal(goal)
+        print("waiting for robot to reach the target wihthin 30 seconds")
         finished_before_timeout = client.wait_for_result(timeout=rospy.Duration(30))
         # detects if the target is reached before timeout
         if finished_before_timeout:
             print("Target reached!")
+            time.sleep(3)
             return client.get_result()
         else:
             print("Action did not finish before time out!")
+            time.sleep(3)
             client.cancel_all_goals()
 
 
