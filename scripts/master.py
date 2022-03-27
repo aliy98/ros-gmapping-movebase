@@ -1,20 +1,31 @@
 #!/usr/bin/env python
+"""
+.. module:: master
+    :platform: Unix
+    :synopsis: the main python script in ros_gmapping_movebase package
+
+.. moduleauthor:: Ali Yousefi <aliyousef98@outlook.com>
+
+Uses rosparam:
+    /robot_state
+
+The node gets user request to choose robot behaviour using robot_state rosparam
+
+"""
+
 import rospy
 from std_srvs.srv import *
 import os
-
-"""
-    master node:
-        gets user request to choose robot behaviour
-        using robot_state rosparam
-"""
 
 # 1 - movebase client
 # 2 - teleop keyboard
 # 3 - assisted teleop
 
-# changes robot's behaviour and sends the corresponding response to other three nodes
 def change_state():
+    """
+    Function for changing robot's behaviour and sending the corresponding response to other three nodes
+
+    """
     os.system('cls||clear')
     print("** MASTER NODE **\n")
     # gets robot behaviour from user
