@@ -1,5 +1,8 @@
 # ros_gmapping_movebase
 This ROS package provides three behaviors for controlling  a simulated mobile robot using gmapping and movebase rospackages.
+You can get to know more about the detatils of the source code using the documentation below:
+https://aliy98.github.io/ros_gmapping_movebase/
+
 ## Installing and runnning 
 Here is the instruction for using the package:
 ```bashscript
