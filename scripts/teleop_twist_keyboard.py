@@ -6,8 +6,7 @@ import rospy
 from geometry_msgs.msg import Twist
 import sys, select, termios, tty
 from sensor_msgs.msg import LaserScan
-import os
-import time
+from std_msgs.msg import String
 
 """
     teleop twist keyboard node:
@@ -26,31 +25,7 @@ import time
 front_obs = False
 right_obs = False
 left_obs = False
-mesg = """
-Reading from the keyboard  and Publishing to Twist!
----------------------------
-Moving around:
-   u    i    o
-   j    k    l
-   m    ,    .
-
-For Holonomic mode (strafing), hold down the shift key:
----------------------------
-   U    I    O
-   J    K    L
-   M    <    >
-
-t : up (+z)
-b : down (-z)
-
-anything else : stop
-
-q/z : increase/decrease max speeds by 10%
-w/x : increase/decrease only linear speed by 10%
-e/c : increase/decrease only angular speed by 10%
-
-CTRL-C to change robot behaviour
-"""
+input_key = ''
 
 # binding input keys for moving the robot
 moveBindings = {
@@ -109,6 +84,10 @@ def clbk_laser(msg):
         # print("left obs detected")
     else:
         left_obs = False
+
+def clbk_input_key(data):
+    global input_key
+    input_key = data.data
 
 class PublishThread(threading.Thread):
     def __init__(self, rate):
@@ -213,16 +192,16 @@ class PublishThread(threading.Thread):
         self.publisher.publish(twist)
 
 
-def getKey(key_timeout):
-    settings = termios.tcgetattr(sys.stdin)
-    tty.setraw(sys.stdin.fileno())
-    rlist, _, _ = select.select([sys.stdin], [], [], key_timeout)
-    if rlist:
-        key = sys.stdin.read(1)
-    else:
-        key = ''
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
+# def getKey(key_timeout):
+#     settings = termios.tcgetattr(sys.stdin)
+#     tty.setraw(sys.stdin.fileno())
+#     rlist, _, _ = select.select([sys.stdin], [], [], key_timeout)
+#     if rlist:
+#         key = sys.stdin.read(1)
+#     else:
+#         key = ''
+#     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+#     return key
 
 def vels(speed, turn):
     return "currently:\tspeed %s\tturn %s " % (speed,turn)
@@ -248,12 +227,9 @@ def teleop():
         pub_thread.wait_for_subscribers()
         pub_thread.update(x, y, z, th, speed, turn)
 
-        os.system('cls||clear')
-        print("** TELEOP TWIST KEYBOARD NODE **\n")
-        print(mesg)
-        print(vels(speed,turn))
         while(1):
-            key = getKey(key_timeout)
+            # key = getKey(key_timeout)
+            key = input_key
             if key in moveBindings.keys():
                 x = moveBindings[key][0]
                 y = moveBindings[key][1]
@@ -262,11 +238,6 @@ def teleop():
             elif key in speedBindings.keys():
                 speed = speed * speedBindings[key][0]
                 turn = turn * speedBindings[key][1]
-
-                print(vels(speed,turn))
-                if (status == 14):
-                    print(mesg)
-                status = (status + 1) % 15
             else:
                 # Skip updating cmd_vel if key timeout and robot already
                 # stopped.
@@ -276,16 +247,6 @@ def teleop():
                 y = 0
                 z = 0
                 th = 0
-                if (key == '\x03'):
-                    rospy.set_param('robot_state', '0')
-                    os.system('cls||clear')
-                    print("** TELEOP TWIST KEYBOARD NODE **\n")
-                    print("choose robot behaviour in master node")
-                    time.sleep(5)
-                    os.system('cls||clear')
-                    print("** TELEOP TWIST KEYBOARD NODE **\n")
-                    print("waiting for master node response...\n")
-                    break
  
             pub_thread.update(x, y, z, th, speed, turn)
 
@@ -302,10 +263,8 @@ def teleop():
 def main():
     rospy.init_node('teleop_twist_keyboard')
     rospy.set_param('robot_state', '0')
-    sub = rospy.Subscriber('/scan', LaserScan, clbk_laser)
-    os.system('cls||clear')
-    print("** TELEOP TWIST KEYBOARD NODE **\n")
-    print("waiting for master node response...\n")
+    rospy.Subscriber('/scan', LaserScan, clbk_laser)
+    rospy.Subscriber('/teleop_input_key', String, clbk_input_key)
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
         if rospy.get_param('robot_state')=='2' or rospy.get_param('robot_state')=='3':
@@ -317,4 +276,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
