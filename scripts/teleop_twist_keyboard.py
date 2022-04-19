@@ -1,4 +1,62 @@
 #!/usr/bin/env python
+"""
+.. module:: teleop_twist_keyboard
+    :platform: Unix
+    :synopsis: provides an interactive interface for user to control the robot with keyboard
+
+.. moduleauthor:: Ali Yousefi <aliyousef98@outlook.com>
+
+Subscribes to:
+    /scan
+
+Publishes to:
+    /cmd_vel
+
+    it can implement two behaviours on robot:
+
+            1: moving without obstacle avoidance:
+                user can move the robot using keys it publishes the desired movements
+                to cmd_vel topic
+
+            2: moveing with obstacle avoidance:
+                subscribes scan topic and uses it to detect obstacles. user 
+                can move the robot using keys and it also avoids the robot
+                from colliding the obstacles
+
+    Here is the instruction for controlling the robot with keyboard:
+    
+        =====  =====  ======
+        Moving around     
+        -------------------- 
+        u	 i	 o  
+        j	 k 	 l
+        m	 ,	 . 
+        =====  =====  ======
+
+        =======  =======  =======
+        Holonomic mode(strafing)    
+        ------------------------- 
+        U	   I	    O  
+        J	   K 	    L
+        M	   <	    > 
+        =======  =======  =======
+
+        t : up (+z)
+
+        b : down (-z)
+
+        anything else : stop
+
+        q/z : increase/decrease max speeds by 10%
+
+        w/x : increase/decrease only linear speed by 10%
+
+        e/c : increase/decrease only angular speed by 10%
+
+        CTRL-C to change robot behaviour
+            
+"""
+
 from __future__ import print_function
 import threading
 import roslib; roslib.load_manifest('teleop_twist_keyboard')
@@ -9,19 +67,6 @@ from sensor_msgs.msg import LaserScan
 import os
 import time
 
-"""
-    teleop twist keyboard node:
-        it can implement two behaviours on robot:
-
-        1: moving without obstacle avoidance:
-            user can move the robot using keys it publishes the desired movements
-            to cmd_vel topic
-
-        2: moveing with obstacle avoidance:
-            subscribes scan topic and uses it to detect obstacles. user 
-            can move the robot using keys and it also avoids the robot
-            from colliding the obstacles
-"""
 
 front_obs = False
 right_obs = False
@@ -83,8 +128,14 @@ speedBindings={
         'c':(1,.9),
     }
 
-# callback function for subscring laser scan topic 
 def clbk_laser(msg):
+    """
+    Callback function for subscring laser scan topic 
+
+    Args: 
+        msg(float): rangefinder sensor data
+
+    """
     global front_obs 
     global right_obs 
     global left_obs
@@ -111,6 +162,20 @@ def clbk_laser(msg):
         left_obs = False
 
 class PublishThread(threading.Thread):
+    """
+        A class which is used for synchronization and publishing robot's twist into cmd_vel topic
+
+        **Attributes:**
+        
+        x, y, z, th, speed, turn : float
+            Robot's Position Information
+        
+        done : bool
+            Robot State 
+
+        **Methods:**
+    
+    """
     def __init__(self, rate):
         super(PublishThread, self).__init__()
         self.publisher = rospy.Publisher('cmd_vel', Twist, queue_size = 1)
@@ -133,6 +198,10 @@ class PublishThread(threading.Thread):
         self.start()
 
     def wait_for_subscribers(self):
+        """
+        Waits for subscribers to connect to the topic
+
+        """
         i = 0
         while not rospy.is_shutdown() and self.publisher.get_num_connections() == 0:
             if i == 4:
@@ -144,6 +213,10 @@ class PublishThread(threading.Thread):
             raise Exception("Got shutdown request before subscribers connected")
 
     def update(self, x, y, z, th, speed, turn):
+        """
+        Updates robots position information
+
+        """
         self.condition.acquire()
         self.x = x
         self.y = y
@@ -156,11 +229,19 @@ class PublishThread(threading.Thread):
         self.condition.release()
 
     def stop(self):
+        """
+        Stops the robot
+
+        """
         self.done = True
         self.update(0, 0, 0, 0, 0, 0)
         self.join()
 
     def run(self):
+        """
+        Detects if user has chosen the obstacle avoidance option and moves the robot by publishing the twist to cmd_vel topic
+        
+        """
         global front_obs
         global right_obs
         global left_obs 
@@ -214,6 +295,16 @@ class PublishThread(threading.Thread):
 
 
 def getKey(key_timeout):
+    """
+    Gets commands from user 
+
+    Args: 
+        key_timeout(float): timeout for input key
+
+    Returns:
+        key(str): user input key
+
+    """
     settings = termios.tcgetattr(sys.stdin)
     tty.setraw(sys.stdin.fileno())
     rlist, _, _ = select.select([sys.stdin], [], [], key_timeout)
@@ -225,9 +316,24 @@ def getKey(key_timeout):
     return key
 
 def vels(speed, turn):
+    """
+    Puts the current speed of robot in a message string
+
+    Args: 
+        speed(float): robot's linear speed
+        turn(float): robot's angular speed
+
+    Returns:
+        msg(str): a message string that shows robot's twist
+
+    """
     return "currently:\tspeed %s\tturn %s " % (speed,turn)
 
 def teleop():
+    """
+    Provides the interface and publishes user command to cmd_vel topic
+
+    """
     settings = termios.tcgetattr(sys.stdin)
     speed = rospy.get_param("~speed", 0.5)
     turn = rospy.get_param("~turn", 1.0)
@@ -317,4 +423,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

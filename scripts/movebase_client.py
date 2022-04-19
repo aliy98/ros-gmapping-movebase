@@ -1,4 +1,20 @@
 #!/usr/bin/env python
+"""
+.. module:: movebase_client
+    :platform: Unix
+    :synopsis: implements an autonomous behaviour on robot in ros_gmapping_movebase package
+
+.. moduleauthor:: Ali Yousefi <aliyousef98@outlook.com>
+
+Subscribes to:
+    /move_base/status
+
+Publishes to:
+    /move_base/goal
+
+The node gets desired position from user and sends it to movebase node using actionlib and if the goal is not reached before timeout cancels it
+
+"""
 from time import sleep
 import rospy
 import actionlib
@@ -6,13 +22,11 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import os
 import time
 
-"""
-    movebase client Node:
-        gets desired position from user and sends it to movebase node using 
-        actionlib and if the goal is not reached before timeout cancels it
-"""
-
 def movebase_clinet():
+    """
+    Function for initializing a client that sends the goal point to movebase actionlib server and requests robot status from it
+
+    """
     # Create an action client called "move_base" with action definition file "MoveBaseAction"
     client = actionlib.SimpleActionClient('move_base',MoveBaseAction)
     # Creates a new goal with the MoveBaseGoal constructor
