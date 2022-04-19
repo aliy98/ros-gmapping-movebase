@@ -35,8 +35,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">Scripts</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -73,7 +76,10 @@
 <span class="sd">Uses rosparam:</span>
 <span class="sd">    /robot_state</span>
 
-<span class="sd">The node gets user request to choose robot behaviour using robot_state rosparam</span>
+<span class="sd">This is the main python script in ros_gmapping_movebase package, it gets user request to choose robot</span>
+<span class="sd">behaviour using robot_state rosparam. Everytime you choose a behaviour for robot you should continue</span>
+<span class="sd">the process in the corresponding node shell, and then if you want to change the robot behaviour again</span>
+<span class="sd">you must come back to this shell.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -85,9 +91,19 @@
 <span class="c1"># 2 - teleop keyboard</span>
 <span class="c1"># 3 - assisted teleop</span>
 
-<div class="viewcode-block" id="change_state"><a class="viewcode-back" href="../../index.html#scripts.master.change_state">[docs]</a><span class="k">def</span> <span class="nf">change_state</span><span class="p">():</span>
+<div class="viewcode-block" id="change_state"><a class="viewcode-back" href="../../master.html#scripts.master.change_state">[docs]</a><span class="k">def</span> <span class="nf">change_state</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function for changing robot&#39;s behaviour and sending the corresponding response to other three nodes</span>
+
+<span class="sd">    robot_state can have valuse from 0 to 3 with the following rules:</span>
+
+<span class="sd">            0: waiting for user to choose robot behaviour</span>
+
+<span class="sd">            1: movebase client </span>
+
+<span class="sd">            2: teleop twist keyboard without obstacle avoidance</span>
+
+<span class="sd">            3: teleop twist keyboard with obstacle avoidance</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;cls||clear&#39;</span><span class="p">)</span>
@@ -125,9 +141,6 @@
 <span class="c1"># If the python node is executed as main process (sourced directly)</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
-
-
-
 </pre></div>
 
            </div>

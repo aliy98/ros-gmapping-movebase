@@ -35,8 +35,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scripts.html">Scripts</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -86,6 +89,38 @@
 <span class="sd">                subscribes scan topic and uses it to detect obstacles. user </span>
 <span class="sd">                can move the robot using keys and it also avoids the robot</span>
 <span class="sd">                from colliding the obstacles</span>
+
+<span class="sd">    Here is the instruction for controlling the robot with keyboard:</span>
+<span class="sd">    </span>
+<span class="sd">        =====  =====  ======</span>
+<span class="sd">        Moving around     </span>
+<span class="sd">        -------------------- </span>
+<span class="sd">        u	 i	 o  </span>
+<span class="sd">        j	 k 	 l</span>
+<span class="sd">        m	 ,	 . </span>
+<span class="sd">        =====  =====  ======</span>
+
+<span class="sd">        =======  =======  =======</span>
+<span class="sd">        Holonomic mode(strafing)    </span>
+<span class="sd">        ------------------------- </span>
+<span class="sd">        U	   I	    O  </span>
+<span class="sd">        J	   K 	    L</span>
+<span class="sd">        M	   &lt;	    &gt; </span>
+<span class="sd">        =======  =======  =======</span>
+
+<span class="sd">        t : up (+z)</span>
+
+<span class="sd">        b : down (-z)</span>
+
+<span class="sd">        anything else : stop</span>
+
+<span class="sd">        q/z : increase/decrease max speeds by 10%</span>
+
+<span class="sd">        w/x : increase/decrease only linear speed by 10%</span>
+
+<span class="sd">        e/c : increase/decrease only angular speed by 10%</span>
+
+<span class="sd">        CTRL-C to change robot behaviour</span>
 <span class="sd">            </span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -160,7 +195,7 @@
         <span class="s1">&#39;c&#39;</span><span class="p">:(</span><span class="mi">1</span><span class="p">,</span><span class="mf">.9</span><span class="p">),</span>
     <span class="p">}</span>
 
-<div class="viewcode-block" id="clbk_laser"><a class="viewcode-back" href="../../index.html#scripts.teleop_twist_keyboard.clbk_laser">[docs]</a><span class="k">def</span> <span class="nf">clbk_laser</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+<div class="viewcode-block" id="clbk_laser"><a class="viewcode-back" href="../../teleop.html#scripts.teleop_twist_keyboard.clbk_laser">[docs]</a><span class="k">def</span> <span class="nf">clbk_laser</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Callback function for subscring laser scan topic </span>
 
@@ -193,7 +228,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">left_obs</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="PublishThread"><a class="viewcode-back" href="../../index.html#scripts.teleop_twist_keyboard.PublishThread">[docs]</a><span class="k">class</span> <span class="nc">PublishThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+<div class="viewcode-block" id="PublishThread"><a class="viewcode-back" href="../../teleop.html#scripts.teleop_twist_keyboard.PublishThread">[docs]</a><span class="k">class</span> <span class="nc">PublishThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A class which is used for synchronization and publishing robot&#39;s twist into cmd_vel topic</span>
 
@@ -229,7 +264,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-<div class="viewcode-block" id="PublishThread.wait_for_subscribers"><a class="viewcode-back" href="../../index.html#scripts.teleop_twist_keyboard.PublishThread.wait_for_subscribers">[docs]</a>    <span class="k">def</span> <span class="nf">wait_for_subscribers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PublishThread.wait_for_subscribers"><a class="viewcode-back" href="../../teleop.html#scripts.teleop_twist_keyboard.PublishThread.wait_for_subscribers">[docs]</a>    <span class="k">def</span> <span class="nf">wait_for_subscribers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Waits for subscribers to connect to the topic</span>
 
@@ -244,7 +279,7 @@
         <span class="k">if</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Got shutdown request before subscribers connected&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PublishThread.update"><a class="viewcode-back" href="../../index.html#scripts.teleop_twist_keyboard.PublishThread.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">turn</span><span class="p">):</span>
+<div class="viewcode-block" id="PublishThread.update"><a class="viewcode-back" href="../../teleop.html#scripts.teleop_twist_keyboard.PublishThread.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">th</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">turn</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Updates robots position information</span>
 
@@ -260,7 +295,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">notify</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="PublishThread.stop"><a class="viewcode-back" href="../../index.html#scripts.teleop_twist_keyboard.PublishThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PublishThread.stop"><a class="viewcode-back" href="../../teleop.html#scripts.teleop_twist_keyboard.PublishThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stops the robot</span>
 
@@ -269,7 +304,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="PublishThread.run"><a class="viewcode-back" href="../../index.html#scripts.teleop_twist_keyboard.PublishThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="PublishThread.run"><a class="viewcode-back" href="../../teleop.html#scripts.teleop_twist_keyboard.PublishThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Detects if user has chosen the obstacle avoidance option and moves the robot by publishing the twist to cmd_vel topic</span>
 <span class="sd">        </span>
@@ -326,7 +361,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">twist</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="getKey"><a class="viewcode-back" href="../../index.html#scripts.teleop_twist_keyboard.getKey">[docs]</a><span class="k">def</span> <span class="nf">getKey</span><span class="p">(</span><span class="n">key_timeout</span><span class="p">):</span>
+<div class="viewcode-block" id="getKey"><a class="viewcode-back" href="../../teleop.html#scripts.teleop_twist_keyboard.getKey">[docs]</a><span class="k">def</span> <span class="nf">getKey</span><span class="p">(</span><span class="n">key_timeout</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets commands from user </span>
 
@@ -347,7 +382,7 @@
     <span class="n">termios</span><span class="o">.</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TCSADRAIN</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">key</span></div>
 
-<div class="viewcode-block" id="vels"><a class="viewcode-back" href="../../index.html#scripts.teleop_twist_keyboard.vels">[docs]</a><span class="k">def</span> <span class="nf">vels</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span> <span class="n">turn</span><span class="p">):</span>
+<div class="viewcode-block" id="vels"><a class="viewcode-back" href="../../teleop.html#scripts.teleop_twist_keyboard.vels">[docs]</a><span class="k">def</span> <span class="nf">vels</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span> <span class="n">turn</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Puts the current speed of robot in a message string</span>
 
@@ -361,7 +396,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;currently:</span><span class="se">\t</span><span class="s2">speed </span><span class="si">%s</span><span class="se">\t</span><span class="s2">turn </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">speed</span><span class="p">,</span><span class="n">turn</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="teleop"><a class="viewcode-back" href="../../index.html#scripts.teleop_twist_keyboard.teleop">[docs]</a><span class="k">def</span> <span class="nf">teleop</span><span class="p">():</span>
+<div class="viewcode-block" id="teleop"><a class="viewcode-back" href="../../teleop.html#scripts.teleop_twist_keyboard.teleop">[docs]</a><span class="k">def</span> <span class="nf">teleop</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provides the interface and publishes user command to cmd_vel topic</span>
 
@@ -455,7 +490,6 @@
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
-
 </pre></div>
 
            </div>

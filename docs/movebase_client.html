@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python Module Index &mdash; ros_gmapping_movebase 1.0 documentation</title>
+  <title>Movebase Client Node &mdash; ros_gmapping_movebase 1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -18,9 +18,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
- 
-
-
+    <link rel="next" title="Teleop Twist Keyboard Node" href="teleop.html" />
+    <link rel="prev" title="Master Node" href="master.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -38,9 +37,14 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="scripts.html">Scripts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="master.html">Master Node</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Movebase Client Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="teleop.html">Teleop Twist Keyboard Node</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -57,8 +61,10 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Python Module Index</li>
+          <li><a href="scripts.html">Scripts</a> &raquo;</li>
+      <li>Movebase Client Node</li>
       <li class="wy-breadcrumbs-aside">
+            <a href="_sources/movebase_client.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -66,67 +72,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
+  <div class="section" id="module-scripts.movebase_client">
+<span id="movebase-client-node"></span><h1>Movebase Client Node<a class="headerlink" href="#module-scripts.movebase_client" title="Permalink to this headline"></a></h1>
+<span class="target" id="module-movebase_client"></span><dl class="simple">
+<dt>Subscribes to:</dt><dd><p>/move_base/status</p>
+</dd>
+<dt>Publishes to:</dt><dd><p>/move_base/goal</p>
+</dd>
+</dl>
+<p>The node gets desired position from user and sends it to movebase node using actionlib and if the goal is not reached before timeout cancels it</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.movebase_client.movebase_clinet">
+<span class="sig-prename descclassname"><span class="pre">scripts.movebase_client.</span></span><span class="sig-name descname"><span class="pre">movebase_clinet</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/movebase_client.html#movebase_clinet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.movebase_client.movebase_clinet" title="Permalink to this definition"></a></dt>
+<dd><p>Function for initializing a client that sends the goal point to movebase actionlib server and requests robot status from it</p>
+</dd></dl>
 
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-m"><strong>m</strong></a> | 
-   <a href="#cap-s"><strong>s</strong></a> | 
-   <a href="#cap-t"><strong>t</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-m"><td></td><td>
-       <strong>m</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="master.html#module-master"><code class="xref">master</code></a> <em>(Unix)</em></td><td>
-       <em>the main python script in ros_gmapping_movebase package</em></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="movebase_client.html#module-movebase_client"><code class="xref">movebase_client</code></a> <em>(Unix)</em></td><td>
-       <em>implements an autonomous behaviour on robot in ros_gmapping_movebase package</em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-s"><td></td><td>
-       <strong>s</strong></td><td></td></tr>
-     <tr>
-       <td><img src="_static/minus.png" class="toggler"
-              id="toggle-1" style="display: none" alt="-" /></td>
-       <td>
-       <code class="xref">scripts</code></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="master.html#module-scripts.master"><code class="xref">scripts.master</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="movebase_client.html#module-scripts.movebase_client"><code class="xref">scripts.movebase_client</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="teleop.html#module-scripts.teleop_twist_keyboard"><code class="xref">scripts.teleop_twist_keyboard</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-t"><td></td><td>
-       <strong>t</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="teleop.html#module-teleop_twist_keyboard"><code class="xref">teleop_twist_keyboard</code></a> <em>(Unix)</em></td><td>
-       <em>provides an interactive interface for user to control the robot with keyboard</em></td></tr>
-   </table>
+</div>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="master.html" class="btn btn-neutral float-left" title="Master Node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="teleop.html" class="btn btn-neutral float-right" title="Teleop Twist Keyboard Node" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
