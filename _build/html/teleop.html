@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teleop Twist Keyboard Node &mdash; ros_gmapping_movebase 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Movebase Client Node" href="movebase_client.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> ros_gmapping_movebase
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="scripts.html">Scripts</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="master.html">Master Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="movebase_client.html">Movebase Client Node</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Teleop Twist Keyboard Node</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ros_gmapping_movebase</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="scripts.html">Scripts</a> &raquo;</li>
+      <li>Teleop Twist Keyboard Node</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/teleop.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-scripts.teleop_twist_keyboard">
+<span id="teleop-twist-keyboard-node"></span><h1>Teleop Twist Keyboard Node<a class="headerlink" href="#module-scripts.teleop_twist_keyboard" title="Permalink to this headline"></a></h1>
+<span class="target" id="module-teleop_twist_keyboard"></span><dl>
+<dt>Subscribes to:</dt><dd><p>/scan</p>
+</dd>
+<dt>Publishes to:</dt><dd><p>/cmd_vel</p>
+<p>it can implement two behaviours on robot:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>1: moving without obstacle avoidance:</dt><dd><p>user can move the robot using keys it publishes the desired movements
+to cmd_vel topic</p>
+</dd>
+<dt>2: moveing with obstacle avoidance:</dt><dd><p>subscribes scan topic and uses it to detect obstacles. user
+can move the robot using keys and it also avoids the robot
+from colliding the obstacles</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Here is the instruction for controlling the robot with keyboard:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 31%" />
+<col style="width: 38%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td colspan="3"><p>Moving around</p></td>
+</tr>
+<tr class="row-even"><td><p>u</p></td>
+<td><p>i</p></td>
+<td><p>o</p></td>
+</tr>
+<tr class="row-odd"><td><p>j</p></td>
+<td><p>k</p></td>
+<td><p>l</p></td>
+</tr>
+<tr class="row-even"><td><p>m</p></td>
+<td><p>,</p></td>
+<td><p>.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td colspan="3"><p>Holonomic mode(strafing)</p></td>
+</tr>
+<tr class="row-even"><td><p>U</p></td>
+<td><p>I</p></td>
+<td><p>O</p></td>
+</tr>
+<tr class="row-odd"><td><p>J</p></td>
+<td><p>K</p></td>
+<td><p>L</p></td>
+</tr>
+<tr class="row-even"><td><p>M</p></td>
+<td><p>&lt;</p></td>
+<td><p>&gt;</p></td>
+</tr>
+</tbody>
+</table>
+<p>t : up (+z)</p>
+<p>b : down (-z)</p>
+<p>anything else : stop</p>
+<p>q/z : increase/decrease max speeds by 10%</p>
+<p>w/x : increase/decrease only linear speed by 10%</p>
+<p>e/c : increase/decrease only angular speed by 10%</p>
+<p>CTRL-C to change robot behaviour</p>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="scripts.teleop_twist_keyboard.PublishThread">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scripts.teleop_twist_keyboard.</span></span><span class="sig-name descname"><span class="pre">PublishThread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/teleop_twist_keyboard.html#PublishThread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.teleop_twist_keyboard.PublishThread" title="Permalink to this definition"></a></dt>
+<dd><p>A class which is used for synchronization and publishing robot’s twist into cmd_vel topic</p>
+<p><strong>Attributes:</strong></p>
+<dl class="simple">
+<dt>x, y, z, th, speed, turn<span class="classifier">float</span></dt><dd><p>Robot’s Position Information</p>
+</dd>
+<dt>done<span class="classifier">bool</span></dt><dd><p>Robot State</p>
+</dd>
+</dl>
+<p><strong>Methods:</strong></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.teleop_twist_keyboard.PublishThread.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/teleop_twist_keyboard.html#PublishThread.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.teleop_twist_keyboard.PublishThread.run" title="Permalink to this definition"></a></dt>
+<dd><p>Detects if user has chosen the obstacle avoidance option and moves the robot by publishing the twist to cmd_vel topic</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.teleop_twist_keyboard.PublishThread.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/teleop_twist_keyboard.html#PublishThread.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.teleop_twist_keyboard.PublishThread.stop" title="Permalink to this definition"></a></dt>
+<dd><p>Stops the robot</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.teleop_twist_keyboard.PublishThread.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/teleop_twist_keyboard.html#PublishThread.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.teleop_twist_keyboard.PublishThread.update" title="Permalink to this definition"></a></dt>
+<dd><p>Updates robots position information</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scripts.teleop_twist_keyboard.PublishThread.wait_for_subscribers">
+<span class="sig-name descname"><span class="pre">wait_for_subscribers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/teleop_twist_keyboard.html#PublishThread.wait_for_subscribers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.teleop_twist_keyboard.PublishThread.wait_for_subscribers" title="Permalink to this definition"></a></dt>
+<dd><p>Waits for subscribers to connect to the topic</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.teleop_twist_keyboard.clbk_laser">
+<span class="sig-prename descclassname"><span class="pre">scripts.teleop_twist_keyboard.</span></span><span class="sig-name descname"><span class="pre">clbk_laser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/teleop_twist_keyboard.html#clbk_laser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.teleop_twist_keyboard.clbk_laser" title="Permalink to this definition"></a></dt>
+<dd><p>Callback function for subscring laser scan topic</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>float</em>) – rangefinder sensor data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.teleop_twist_keyboard.getKey">
+<span class="sig-prename descclassname"><span class="pre">scripts.teleop_twist_keyboard.</span></span><span class="sig-name descname"><span class="pre">getKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_timeout</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/teleop_twist_keyboard.html#getKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.teleop_twist_keyboard.getKey" title="Permalink to this definition"></a></dt>
+<dd><p>Gets commands from user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key_timeout</strong> (<em>float</em>) – timeout for input key</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>user input key</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>key(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.teleop_twist_keyboard.teleop">
+<span class="sig-prename descclassname"><span class="pre">scripts.teleop_twist_keyboard.</span></span><span class="sig-name descname"><span class="pre">teleop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/teleop_twist_keyboard.html#teleop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.teleop_twist_keyboard.teleop" title="Permalink to this definition"></a></dt>
+<dd><p>Provides the interface and publishes user command to cmd_vel topic</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scripts.teleop_twist_keyboard.vels">
+<span class="sig-prename descclassname"><span class="pre">scripts.teleop_twist_keyboard.</span></span><span class="sig-name descname"><span class="pre">vels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">turn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/scripts/teleop_twist_keyboard.html#vels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scripts.teleop_twist_keyboard.vels" title="Permalink to this definition"></a></dt>
+<dd><p>Puts the current speed of robot in a message string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>speed</strong> (<em>float</em>) – robot’s linear speed</p></li>
+<li><p><strong>turn</strong> (<em>float</em>) – robot’s angular speed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a message string that shows robot’s twist</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>msg(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="movebase_client.html" class="btn btn-neutral float-left" title="Movebase Client Node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Ali Yousefi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -9,7 +9,10 @@
 Uses rosparam:
     /robot_state
 
-The node gets user request to choose robot behaviour using robot_state rosparam
+This is the main python script in ros_gmapping_movebase package, it gets user request to choose robot
+behaviour using robot_state rosparam. Everytime you choose a behaviour for robot you should continue
+the process in the corresponding node shell, and then if you want to change the robot behaviour again
+you must come back to this shell.
 
 """
 
@@ -24,6 +27,16 @@ import os
 def change_state():
     """
     Function for changing robot's behaviour and sending the corresponding response to other three nodes
+
+    robot_state can have valuse from 0 to 3 with the following rules:
+
+            0: waiting for user to choose robot behaviour
+
+            1: movebase client 
+
+            2: teleop twist keyboard without obstacle avoidance
+
+            3: teleop twist keyboard with obstacle avoidance
 
     """
     os.system('cls||clear')
@@ -61,6 +74,3 @@ def main():
 # If the python node is executed as main process (sourced directly)
 if __name__ == '__main__':
     main()
-
-
-

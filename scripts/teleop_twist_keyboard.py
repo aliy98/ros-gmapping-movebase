@@ -22,6 +22,38 @@ Publishes to:
                 subscribes scan topic and uses it to detect obstacles. user 
                 can move the robot using keys and it also avoids the robot
                 from colliding the obstacles
+
+    Here is the instruction for controlling the robot with keyboard:
+    
+        =====  =====  ======
+        Moving around     
+        -------------------- 
+        u	 i	 o  
+        j	 k 	 l
+        m	 ,	 . 
+        =====  =====  ======
+
+        =======  =======  =======
+        Holonomic mode(strafing)    
+        ------------------------- 
+        U	   I	    O  
+        J	   K 	    L
+        M	   <	    > 
+        =======  =======  =======
+
+        t : up (+z)
+
+        b : down (-z)
+
+        anything else : stop
+
+        q/z : increase/decrease max speeds by 10%
+
+        w/x : increase/decrease only linear speed by 10%
+
+        e/c : increase/decrease only angular speed by 10%
+
+        CTRL-C to change robot behaviour
             
 """
 
@@ -391,4 +423,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
