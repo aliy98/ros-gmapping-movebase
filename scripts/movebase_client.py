@@ -11,8 +11,10 @@ from std_msgs.msg import String
         actionlib and if the goal is not reached before timeout cancels it
 """
 
-goal_x = -5.0
-goal_y = 8.0
+goal_x = 0
+goal_y = 0
+reached_targets = 0
+not_reached_targets = 0
 
 def callback_movebase_client_goal(data):
     global goal_x
@@ -26,6 +28,8 @@ def callback_movebase_client_goal(data):
 def movebase_clinet():
     global goal_x
     global goal_y
+    global reached_targets 
+    global not_reached_targets 
     # Create an action client called "move_base" with action definition file "MoveBaseAction"
     client = actionlib.SimpleActionClient('move_base',MoveBaseAction)
     # Creates a new goal with the MoveBaseGoal constructor
@@ -46,10 +50,14 @@ def movebase_clinet():
     # detects if the target is reached before timeout
     if finished_before_timeout:
         print("Target reached!")
+        reached_targets += 1
+        rospy.set_param('reached_targets', reached_targets)
         time.sleep(3)
         return client.get_result()
     else:
         print("Action did not finish before time out!")
+        not_reached_targets += 1
+        rospy.set_param('not_reached_targets', not_reached_targets)
         time.sleep(3)
         client.cancel_all_goals()
 
@@ -58,10 +66,15 @@ def main():
     rospy.init_node('movebase_client')
     rospy.Subscriber("movebase_client_goal", String, callback_movebase_client_goal)
     rospy.set_param('robot_state', '0')
+    rospy.set_param('input_target', '0')
+    rospy.set_param('reached_targets', reached_targets)
+    rospy.set_param('not_reached_targets', not_reached_targets)
     rate = rospy.Rate(20)
     while not rospy.is_shutdown():
-        if rospy.get_param('robot_state')=='1':
+        if rospy.get_param('robot_state')=='1' and rospy.get_param('input_target')=='1':
+            rospy.set_param('input_target', '0')
             movebase_clinet()
+            
         else:
             rate.sleep()
             continue
