@@ -2,6 +2,9 @@
 <launch>
 	
 	  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+  <node pkg="tf2_web_republisher" type="tf2_web_republisher" name="tf2_web_republisher" />  
+  
   <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
   <arg name="extra_gazebo_args" default=""/>
