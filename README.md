@@ -1,5 +1,5 @@
 ## Jupyter Notebook
-To perform a more convenient user interface for this rospackage a [jupyter notebook](https://github.com/aliy98/ros_gmapping_movebase/blob/jupyter_notebook/notebook/ros_gmapping_movebase.ipynb) is also created. With the widgets provided for jupyter notebook, you can:
+To perform a more convenient user interface for this rospackage a [jupyter notebook](https://github.com/aliy98/ros_gmapping_movebase/blob/jupyter_notebook/notebook/ros-gmapping-movebase.ipynb) is also created. With the widgets provided for jupyter notebook, you can:
 1. change robot behaviour
 2. set goal point for the first behaviour
 3. input direction commands for the second and third behaviour
